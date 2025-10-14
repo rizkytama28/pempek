@@ -1,0 +1,26 @@
+---
+import '../styles/globals.css';
+import Cart from '../components/Cart.tsx';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Website Resto Pempek" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="bg-background text-text-main antialiased">
+		<slot />
+        <Cart client:load />
+	</body>
+</html>
