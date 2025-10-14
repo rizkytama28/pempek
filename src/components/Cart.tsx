@@ -9,14 +9,21 @@ export default function Cart() {
     const subtotal = Object.values(cart).reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const handleCheckout = () => {
-        const myPhoneNumber = '6281234567890'; // GANTI DENGAN NOMOR WA-MU
+        const myPhoneNumber = '6287734916089';
 
-        let message = `Halo, saya mau order pempek:\n\n`;
-        Object.values(cart).forEach(item => {
-            message += `${item.name} (x${item.quantity}) - Rp ${item.price * item.quantity}\n`;
-        });
-        message += `\n*Subtotal: Rp ${subtotal}*`;
-        message += `\n\n(Mohon jangan ubah pesan ini agar pesanan cepat diproses)`;
+        let message = `*-- PESANAN BARU --*\n\n`;
+        message += `Halo, saya ingin memesan:\n\n`;
+
+        const items = Object.values(cart).map(item => 
+            `- ${item.name} (x${item.quantity}) : Rp ${item.price * item.quantity}`
+        ).join('\n');
+
+        message += items;
+
+        message += `\n\n--------------------\n`;
+        message += `*Total Pesanan: Rp ${subtotal.toLocaleString('id-ID')}*\n`;
+        message += `--------------------\n\n`;
+        message += `Mohon konfirmasi untuk ketersediaan dan total pembayarannya. Terima kasih!`;
 
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${myPhoneNumber}?text=${encodedMessage}`, '_blank');
