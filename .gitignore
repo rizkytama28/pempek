@@ -1,0 +1,12 @@
+
+# Ignore environment variables
+.env
+
+# Ignore node_modules
+node_modules
+
+# Ignore Astro build output
+dist/
+
+# Ignore Astro cache and logs
+.astro/
