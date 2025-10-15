@@ -10,6 +10,10 @@ export default {
         'surface': '#393E46',
         'primary': '#D65A31',
         'text-main': '#EEEEEE',
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+        serif: ['Alegreya', 'serif'],
       }
     },
   },

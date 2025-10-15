@@ -15,11 +15,16 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Website Resto Pempek" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" href="https://vdjilwbbvrbcyecqpsxr.supabase.co/storage/v1/object/public/menu-images/logop.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<!-- Google Fonts: Montserrat & Alegreya -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-background text-text-main antialiased">
+	<body class="bg-background text-text-main antialiased font-sans">
 		<slot />
         <Cart client:load />
 	</body>
