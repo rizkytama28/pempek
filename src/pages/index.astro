@@ -1,25 +1,118 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import MenuCard from '../components/MenuCard.astro'; // Import MenuCard
+import { supabase } from '../lib/supabase';
+
+// Fetch 3 best-selling items
+const { data: bestSellers, error } = await supabase
+    .from('menus')
+    .select('*, categories(name)')
+    .eq('is_best_seller', true)
+    .limit(3);
 ---
 
 <Layout title="Pempek Bhayangkara - Rasa Asli Palembang">
 	<Header />
-	<main>
-		<section class="h-screen flex items-center justify-center text-center">
-			<div class="px-4">
-				<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">
-					Rasa Otentik, <span class="text-primary">Kualitas Terbaik.</span>
-				</h1>
-				<p class="mt-4 text-lg md:text-xl text-text-main/80 max-w-2xl mx-auto">
-					Nikmati kelezatan pempek asli Palembang yang dibuat dari bahan-bahan pilihan. Siap memanjakan lidahmu.
-				</p>
-				<div class="mt-8">
-					<a href="/menu" class="bg-primary hover:bg-primary/90 text-background font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105">
-						Pesan Sekarang
-					</a>
-				</div>
-			</div>
-		</section>
-	</main>
+<main>
+    <!-- Hero Section -->
+    <section class="relative h-[80vh] flex items-center justify-center text-center text-white overflow-hidden">
+        <!-- Background Image with Dark Overlay -->
+        <div class="absolute inset-0 bg-black/60"></div>
+        <img 
+            src="https://vdjilwbbvrbcyecqpsxr.supabase.co/storage/v1/object/public/menu-images/1760469715819-kapal%20selam.jpg" 
+            alt="Pempek kapal selam lezat disajikan di atas meja" 
+            class="absolute inset-0 w-full h-full object-cover"
+        >
+
+        <div class="relative z-10 px-4">
+            <h1 
+                class="text-5xl md:text-7xl font-extrabold tracking-tight animate-fade-in-up"
+                style="animation-delay: 0.2s;"
+            >
+                <span class="bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">Rasa Otentik, </span>
+                <span class="text-primary">Kualitas Terbaik.</span>
+            </h1>
+            <p 
+                class="mt-4 text-lg md:text-xl text-white/90 drop-shadow-sm max-w-2xl mx-auto animate-fade-in-up font-semibold"
+                style="animation-delay: 0.4s;"
+            >
+                Nikmati kelezatan aneka masakan rumahan yang dibuat dari bahan-bahan pilihan. Siap memanjakan lidahmu.
+            </p>
+            <div 
+                class="mt-8 animate-fade-in-up"
+                style="animation-delay: 0.6s;"
+            >
+                <a href="/menu" class="bg-primary hover:bg-primary/90 text-background font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105">
+                    Lihat Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers Section -->
+    {bestSellers && bestSellers.length > 0 && (
+        <section id="best-sellers" class="py-20 bg-background">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-4">Menu Unggulan Kami</h2>
+                <p class="text-text-main/70 mb-12 max-w-xl mx-auto">Menu yang paling sering dipesan dan menjadi favorit pelanggan setia kami.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {bestSellers.map(item => (
+                        <MenuCard item={item} />
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- Why Choose Us Section -->
+    <section id="why-us" class="py-20 bg-surface">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-12">Kenapa Memilih Kami?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-primary/10 p-4 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M12 22a10 10 0 0 0 10-10H2a10 10 0 0 0 10 10z"/><path d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M15.32 12.21a2 2 0 0 1-2.64 0"/><path d="M12 12a6 6 0 0 0-6 6"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Resep Asli</h3>
+                    <p class="text-text-main/70">Cita rasa otentik dari resep keluarga yang terjaga kualitasnya.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-primary/10 p-4 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m10 10.5 2 2 2-2"/><path d="m10 15.5 2 2 2-2"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Bahan Baku Pilihan</h3>
+                    <p class="text-text-main/70">Kami hanya menggunakan bahan baku segar dan berkualitas terbaik untuk semua menu.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-primary/10 p-4 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="m8 13 2.5 2.5L16 10"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">100% Halal</h3>
+                    <p class="text-text-main/70">Diproses dengan cara yang bersih dan higienis, telah tersertifikasi Halal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in-up {
+        opacity: 0; /* Start invisible */
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+</style>
 </Layout>
