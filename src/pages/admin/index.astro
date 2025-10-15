@@ -21,6 +21,14 @@ import Layout from '../../layouts/Layout.astro';
                 <button id="add-menu-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">+ Tambah Menu Baru</button>
             </div>
             <div id="menu-table-container" class="bg-surface p-4 rounded-lg border border-background"></div>
+
+            <!-- Kelola Kategori Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold mb-6">Kelola Kategori</h2>
+                <div id="category-list-container" class="bg-surface p-4 rounded-lg border border-background">
+                    <!-- Category list will be rendered here by JavaScript -->
+                </div>
+            </div>
         </main>
     </div>
 
@@ -76,6 +84,14 @@ import Layout from '../../layouts/Layout.astro';
                             <span class="ml-3 text-sm font-medium text-text-main">Tersedia</span>
                         </label>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-main/80 mb-2">Best Seller</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="is_best_seller" name="is_best_seller" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            <span class="ml-3 text-sm font-medium text-text-main">Jadikan Best Seller</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="flex justify-end space-x-4 mt-6">
                     <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Batal</button>
@@ -93,6 +109,7 @@ import Layout from '../../layouts/Layout.astro';
     const userEmailEl = document.getElementById('user-email');
     const adminDashboardEl = document.getElementById('admin-dashboard');
     const menuTableContainerEl = document.getElementById('menu-table-container');
+    const categoryListContainerEl = document.getElementById('category-list-container');
     const menuModal = document.getElementById('menu-modal');
     const modalTitle = document.getElementById('modal-title');
     const menuForm = document.getElementById('menu-form') as HTMLFormElement;
@@ -105,6 +122,7 @@ import Layout from '../../layouts/Layout.astro';
     const cancelAddCategoryBtn = document.getElementById('cancel-add-category-btn');
     const menuIdInput = document.getElementById('menu-id') as HTMLInputElement;
     const availableCheckbox = document.getElementById('available') as HTMLInputElement;
+    const bestSellerCheckbox = document.getElementById('is_best_seller') as HTMLInputElement;
     const imageFileInput = document.getElementById('image-file') as HTMLInputElement;
     const imagePreviewWrapper = document.getElementById('image-preview-wrapper');
     const imagePreview = document.getElementById('image-preview') as HTMLImageElement;
@@ -120,11 +138,40 @@ import Layout from '../../layouts/Layout.astro';
         }
     }
 
+    async function fetchAndDisplayCategories() {
+        categoryListContainerEl.innerHTML = '<p>Memuat data kategori...</p>';
+        const { data: categories, error } = await supabase.from('categories').select('id, name').order('name');
+
+        if (error) {
+            categoryListContainerEl.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            return;
+        }
+        if (!categories || categories.length === 0) {
+            categoryListContainerEl.innerHTML = '<p>Belum ada kategori.</p>';
+            return;
+        }
+
+        const listHtml = `
+            <ul class="space-y-2">
+                ${categories.map(cat => `
+                    <li class="flex justify-between items-center p-2 rounded-md bg-background">
+                        <span>${cat.name}</span>
+                        <button data-id="${cat.id}" data-name="${cat.name}" class="delete-category-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">
+                            Hapus
+                        </button>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+        categoryListContainerEl.innerHTML = listHtml;
+    }
+
     function openModalForCreate() {
         menuForm.reset();
         menuIdInput.value = '';
         modalTitle.textContent = 'Tambah Menu Baru';
         availableCheckbox.checked = true;
+        bestSellerCheckbox.checked = false;
         imagePreviewWrapper.classList.add('hidden');
         imageFileInput.value = '';
         menuModal.classList.remove('hidden');
@@ -142,6 +189,7 @@ import Layout from '../../layouts/Layout.astro';
         (document.getElementById('description') as HTMLTextAreaElement).value = menu.description;
         categorySelect.value = menu.category_id;
         availableCheckbox.checked = menu.available;
+        bestSellerCheckbox.checked = menu.is_best_seller;
         imageFileInput.value = '';
         if (menu.image_url) {
             imagePreview.src = menu.image_url;
@@ -191,6 +239,7 @@ import Layout from '../../layouts/Layout.astro';
             adminDashboardEl.classList.remove('hidden');
             await fetchCategories();
             await fetchAndDisplayMenus();
+            await fetchAndDisplayCategories();
         }
     }
 
@@ -213,6 +262,7 @@ import Layout from '../../layouts/Layout.astro';
             categorySelect.classList.remove('hidden');
             showAddCategoryBtn.classList.remove('hidden');
             await fetchCategories(data.id);
+            await fetchAndDisplayCategories();
         }
     });
 
@@ -236,7 +286,15 @@ import Layout from '../../layouts/Layout.astro';
                 imageUrl = null;
             }
 
-            const menuData = { name: formData.get('name'), price: formData.get('price'), description: formData.get('description'), category_id: formData.get('category_id'), available: availableCheckbox.checked, image_url: imageUrl };
+            const menuData = { 
+                name: formData.get('name'), 
+                price: formData.get('price'), 
+                description: formData.get('description'), 
+                category_id: formData.get('category_id'), 
+                available: availableCheckbox.checked, 
+                is_best_seller: bestSellerCheckbox.checked,
+                image_url: imageUrl 
+            };
             const { error } = id ? await supabase.from('menus').update(menuData).match({ id }) : await supabase.from('menus').insert(menuData);
             if (error) throw error;
             closeModal();
@@ -258,6 +316,26 @@ import Layout from '../../layouts/Layout.astro';
             if (window.confirm(`Yakin mau menghapus menu "${menuName}"?`)) {
                 await supabase.from('menus').delete().match({ id });
                 fetchAndDisplayMenus();
+            }
+        }
+    });
+
+    categoryListContainerEl.addEventListener('click', async (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('delete-category-btn')) {
+            const id = target.dataset.id;
+            const name = target.dataset.name;
+
+            if (window.confirm(`Yakin mau menghapus kategori "${name}"? Menghapus kategori mungkin gagal jika masih digunakan oleh menu.`)) {
+                const { error } = await supabase.from('categories').delete().match({ id });
+
+                if (error) {
+                    alert(`Gagal menghapus kategori: ${error.message}. Pastikan tidak ada menu yang menggunakan kategori ini.`);
+                } else {
+                    // Refresh both lists
+                    await fetchAndDisplayCategories();
+                    await fetchCategories(); // This re-populates the dropdown in the modal
+                }
             }
         }
     });

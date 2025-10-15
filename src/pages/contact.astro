@@ -7,16 +7,61 @@ import Header from '../components/Header.astro';
 	<Header />
 	<main class="container mx-auto p-4">
 		<h1 class="text-4xl font-bold my-8 text-center">Hubungi Kami</h1>
-		<div class="text-center py-20 max-w-lg mx-auto">
-			<p class="text-lg text-text-main/80">Punya pertanyaan atau mau order langsung? Hubungi kami!</p>
-            <div class="mt-12">
-                <h2 class="text-2xl font-bold">Pesanan Skala Besar?</h2>
-                <p class="text-lg mt-2 text-text-main/80">Butuh pesanan untuk acara kantor, arisan, atau kumpul keluarga? Kami siap melayani! Hubungi kami untuk mendapatkan penawaran khusus.</p>
-            </div>
-            <div class="mt-8 space-y-4">
-                <p class="text-xl">📞 WhatsApp: <a href="https://wa.me/6287734916089" target="_blank" class="text-primary hover:underline">+62 877-3491-6089</a></p>
-                <p class="text-xl">📍 Alamat: Jalan Bhayangkara No.15, Tonggalan, Klaten Tengah</p>
-            </div>
+
+		<div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-start">
+			
+			<!-- Left Column: Main Contact & Order Info -->
+			<div class="bg-surface p-6 rounded-lg">
+				<h2 class="text-2xl font-bold text-primary mb-4">Info Kontak & Pesanan</h2>
+				<p class="text-text-main/80 mb-6">
+					Punya pertanyaan, butuh pesanan untuk acara, atau mau order langsung? Jangan ragu hubungi kami melalui kontak di bawah ini.
+				</p>
+				<div class="space-y-4">
+					<div class="flex items-start space-x-3">
+						<span class="text-primary mt-1">📞</span>
+						<div>
+							<h3 class="font-semibold">WhatsApp</h3>
+							<a href="https://wa.me/6287734916089" target="_blank" class="text-text-main hover:underline">+62 877-3491-6089</a>
+						</div>
+					</div>
+					<div class="flex items-start space-x-3">
+						<span class="text-primary mt-1">📍</span>
+						<div>
+							<h3 class="font-semibold">Alamat Resto</h3>
+							<p class="text-text-main">Jalan Bhayangkara No.15, Tonggalan, Klaten Tengah</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column: Additional Info -->
+			<div class="bg-surface p-6 rounded-lg">
+				<h2 class="text-2xl font-bold text-primary mb-4">Informasi Penting</h2>
+				<ul class="space-y-4 text-text-main/90">
+					<li class="flex items-start space-x-3">
+						<span class="font-semibold text-primary mt-1">✓</span>
+						<div>
+							<h3 class="font-semibold">Sertifikasi Halal</h3>
+							<p>ID3311001005591072</p>
+						</div>
+					</li>
+					<li class="flex items-start space-x-3">
+						<span class="font-semibold text-primary mt-1">✓</span>
+						<div>
+							<h3 class="font-semibold">Opsi Pesanan</h3>
+							<p>Bisa diambil langsung di resto atau diantar (delivery).</p>
+						</div>
+					</li>
+					<li class="flex items-start space-x-3">
+						<span class="font-semibold text-primary mt-1">✓</span>
+						<div>
+							<h3 class="font-semibold">Layanan Cepat</h3>
+							<p>Jika pesan WhatsApp tidak terbalas >10 menit, silakan hubungi kami langsung via telepon.</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+
 		</div>
 	</main>
 </Layout>

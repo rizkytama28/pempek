@@ -33,8 +33,8 @@ export default function Cart() {
         <>
             {/* Floating Cart Button */}
             <div className="fixed bottom-5 right-5 z-50">
-                <button onClick={() => setIsOpen(true)} className="bg-primary text-background font-bold rounded-full p-4 shadow-lg hover:bg-primary/90 transition-transform transform hover:scale-110">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <button onClick={() => setIsOpen(true)} className="bg-primary text-background font-bold rounded-lg px-6 py-3 shadow-lg hover:bg-primary/90 transition-transform transform hover:scale-105">
+                    Pesan Sekarang
                 </button>
             </div>
 
@@ -76,7 +76,7 @@ export default function Cart() {
                             <span>Rp {subtotal.toLocaleString('id-ID')}</span>
                         </div>
                         <button onClick={handleCheckout} disabled={Object.keys(cart).length === 0} className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded disabled:bg-surface disabled:cursor-not-allowed">
-                            Checkout via WhatsApp
+                            Pesan via WhatsApp
                         </button>
                     </div>
                 </div>
